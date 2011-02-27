@@ -1,0 +1,11 @@
+The Doodle Editor is a Mootools and PHP based WYSIWYG web page authoring tool.
+
+Server Stuff:
+
+I use Nginx as my testbed and rewrite URLs as follows:
+
+                rewrite ^/public_assets/(.*)$ /public_assets/$1 break;
+                rewrite ^/(.+)\.php$ /$1.php break;
+                rewrite ^/([a-zA-Z0-9\/]+)$ /ajax_test.php?p=$1 break;
+
+-hijinks 27/2/11
