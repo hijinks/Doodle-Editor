@@ -1,0 +1,67 @@
+
+.f_calendarWrap {
+	background-color:#fff;
+	padding:5px;
+	width:200px;
+	border:1px solid #ccc;
+	margin:20px auto 0 auto;
+}
+
+.f_calendar {
+	width:100%;
+}
+
+.f_calHead {
+	font-size:17px;
+	text-align:center;
+	height:25px;
+	width:100%;
+	border-bottom:1px solid #ccc;
+}
+
+.f_calendar th {
+	font-weight:normal;
+	padding:3px;
+	width:22px;
+}
+
+.f_calendar td{
+	padding:3px;
+	width:22px;
+	text-align:center;
+	cursor:pointer;
+}
+
+.f_calendarWrap .f_select {
+	font-size: 10px;
+}
+
+td.selectable:hover {
+	background-color:#999;
+	color:#fff;
+}
+
+.f_calInc, .f_calDec {
+	display:block;
+	font-weight:bold;
+}
+
+.f_calInc {
+	float:right;
+}
+
+.f_calDec {
+	float:left;
+}
+
+.f_calHead span {
+	font-size: 12px;
+}
+
+.dateDiv {
+	width:220px;
+}
+
+.f_dateWrap * {
+	display: inline-block;
+}

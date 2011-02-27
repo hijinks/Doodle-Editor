@@ -1,0 +1,523 @@
+h1, h2, h3 {
+	margin:10px 0 10px 0;
+}
+
+#majorOptions li > * {
+	float:left;
+}
+
+#majorOptions li label {
+	margin:10px;
+}
+
+#title {
+	border:1px solid #aaa;
+	width:300px;
+	height:30px;
+	padding:5px;
+	font-family: inherit;
+	font-size: 12px;
+}
+
+#thumbnail {
+	padding:5px;
+	border:1px solid #aaa;
+	width:80px;
+	height:30px;
+	font-size: 10px;
+	overflow: hidden;
+}
+
+#thumbnail img {
+	height:25px;
+}
+
+#adminWrap {
+	width:800px;
+	margin:40px auto 10px auto;
+	border:1px solid #ccc;
+	padding:20px;
+	background-color: #fff;
+}
+
+#cont {
+	width:800px;
+}
+
+#editorBtns{
+	float:right;
+	list-style-type: none;
+	width:300px;
+	margin-top:-5px;
+}
+
+#editorBtns a { text-decoration: none;}
+
+#editorBtns li {
+	float:right;
+	margin-left:10px;
+}
+
+#alertDiv {
+	width:100px;
+	float:right;
+}
+.tooltip {
+	padding:3px;
+	background-color:blue;
+	font-size:0.7em;
+	color:#fff;
+	border:1px solid #333;
+}
+
+:focus {
+	outline:0;
+}
+.warn {
+	color:red;
+	font-weight: bold;
+}
+.success {
+	color:#339900;
+	font-weight: bold;
+}
+
+.singleLine {
+	width:450px;
+	padding:5px;
+	font-family: sans-serif;
+	font-size:90%;
+	border:1px solid #999;
+}
+
+.textEntry {
+	padding:10px;
+	line-height: 140%;
+	font-family: sans-serif;
+	font-size:90%;
+	height:400px;
+	width:600px;
+	border:1px solid #999;
+}
+
+#overlayWrap {
+	top:0;
+	left:0;
+	right:0;
+	position: absolute;
+	z-index:200;
+}
+
+#overlayTool {
+	width:700px;
+	border:1px solid #999;
+	background-color:#eee;
+	margin:100px auto 0 auto;
+	padding:10px;
+}
+
+#overlayTool .button{
+	margin:0px 5px 5px 0px;
+}
+
+#overlayToolTextarea {
+	width:688px;
+	min-height:300px;
+	padding:5px;
+	border:1px solid #888;
+	font-family:inherit;
+	line-height: inherit;
+}
+
+#datepicker_div {
+	margin:0 auto;
+	width:300px;
+	margin-top:40px;
+}
+#datepicker_div table {
+	background-color: #fafafa;
+}
+
+#datepicker_div table td {
+	padding:5px;
+	border:1px solid #aeaeae;
+
+}
+
+.highlighted {
+	background:yellow;
+}
+
+#formatDate {
+	font-size:14px;
+	margin-left:10px;
+}
+
+.dropImg {
+	float:left;
+	margin-right:10px;
+	cursor:move;
+}
+.dropPDF {
+	clear:left;
+	margin-bottom:5px;
+	padding:2px;
+	background-color:#fff;
+}
+
+#toolbar ul {
+	list-style-type: none;
+	margin-top:10px;
+	padding:0;
+}
+
+#toolbar ul li {
+	display:inline;
+	margin-right:2px;
+}
+
+.button {
+	border:1px solid #999;
+	margin-bottom:5px;
+	padding:3px;
+	background-color: #fff;
+}
+.button:active {
+	border:1px inset #eee;
+}
+#toolbar span, #toolbar label {
+	font-size: 12px;
+}
+#newPara {
+	font-size:13px;
+}
+#newH1 {
+	font-weight: bold;
+	font-size:16px;
+}
+#newH2 {
+	font-weight: bold;
+	font-size:13px;
+}
+#newH3 {
+	font-size:11px;
+}
+#newBold {
+	font-weight: bold;
+}
+#newItalics {
+	font-style: italic;
+}
+
+#newLink, #newUnderline {
+	text-decoration: underline;
+}
+
+#imageGallery, #editorCanvas {
+	background-color:#fafafa;
+	border:1px solid #999;
+}
+
+#imageGallery {
+	overflow: scroll;
+	background-color:#eaeaea;
+}
+
+#imageRow, #imageGallery p {
+	padding:10px;
+}
+
+#editorCanvas {
+	margin-top:10px;
+	min-height: 400px;
+	overflow: hidden;
+}
+
+#editorCanvas img {
+	border:1px dotted #999;
+}
+
+#editorCanvas img.bordered {
+	border:3px double #999;
+}
+
+.blockList {
+	list-style-type: none;
+	padding:0;
+	margin:0 0 0 2px;
+	float:left;
+	width:797px;
+	min-height:600px;
+}
+
+.double { width:397px; }
+.triple { width:264px; }
+
+li.bordered {
+	border:1px solid #ddd;
+	background-color:#fff;
+	line-height: 160%;
+	overflow:hidden;
+}
+
+li.bordered.hoverBlock {
+	border:1px dashed #222;
+}
+
+li.bordered span {
+	display:inline-block;
+}
+
+#editorCanvas li {
+	margin:3px;
+	padding:5px;
+	min-height:10px;
+	font-size:13px;
+}
+
+.blockOutline {
+	margin:3px;
+	padding:0;
+	min-height:10px;
+	font-size:13px;
+	background-color: #99ff99;
+}
+
+.prevList {
+	padding:0;
+	margin-left:20px;
+	border:1px dotted #333;
+}
+
+.editTable, .prevVisible {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.editTable tr, .editTable td, .editTable th {
+	margin:0;
+	padding:0;
+}
+
+.editTable td, .editTable th  {
+	width:100px;
+}
+
+.editTable th { 
+	height:30px; 
+}
+.editTable td { height:50px; } 
+
+.visible thead{ background-color:#ddd; }
+.visible tbody{ background-color:#fff; }
+.visible td, .visible th { border:1px solid #999; }
+
+.centred { margin:0 auto; }
+.uncentred { margin:0; }
+
+.cellEdit {
+	padding-top:10px;
+	margin:0;
+	border:none;
+	background-color: transparent;
+	width:98%;
+	height:100%;
+	font-size:12px;
+	font-family:inherit;
+	line-height: inherit;
+	text-align: center;
+	overflow:visible;
+}
+
+.editList {
+	width:100%;
+}
+.editList .cellEdit {
+	text-align: left;
+	padding:10px 0 0 10px;
+}
+
+.prevVisible {
+	border:1px solid #999;
+	border-collapse: collapse;
+}
+
+.prevVisible td, .prevVisible th { border:1px solid #999; }
+
+.prevHidden{
+	border-collapse: collapse;
+}
+
+.prevHidden, .prevHidden td, .prevHidden th, .hidden, .hidden td, .hidden th, .editList, .editList td, .editList th {
+	border:1px dotted #333;
+}
+
+.prevVisible td , .prevVisible th, .prevHidden td, .prevHidden th {
+	min-height: 50px;
+	min-width: 70px;
+	padding:5px;
+}
+
+.editList .typeTd {
+	min-height:30px;
+	width:30px;
+	padding-top:10px;
+	vertical-align: top;
+	text-align: center;
+}
+
+.editList .contentTd {
+	background-color:white;
+}
+
+td.hoverBlock, th.hoverBlock {
+	background-color:yellow;
+}
+
+.fakeLink, .fakeEmail {
+	color:blue;
+	text-decoration: underline;
+}
+
+.linkAlert {
+	color:green;
+}
+.previewOutline {
+	display:inline-block;
+}
+
+.previewOutline.left {
+	border:2px solid green;
+	float:left;
+	margin:0px 10px 10px 0px;
+}
+
+.previewOutline.middle .insideOutline {
+	border:2px solid green;
+	margin:0 auto;
+}
+
+.previewOutline.right {
+	border:2px solid green;
+	float:right;
+	margin:0px 0px 10px 10px;
+}
+
+img.right {
+	float:right;
+	clear:right;
+	margin:0 0 10px 10px;
+	display:inline;
+}
+
+img.left {
+	float:left;
+	clear:left;
+	margin:0 10px 10px 0;
+	display:inline;
+}
+
+.inlineImageRow {
+	display:block;
+	text-align: center;
+	margin-bottom:10px;
+}
+
+.inlineImageRow  img {
+	width:100px;
+}
+
+#imageResizeTools {
+	float:right;
+	width:15px;
+}
+
+#sliderHandle {
+	cursor:move;
+	height: 20px;
+	width: 20px;
+	background: transparent url(imgs/handle.png) no-repeat top left;
+}
+
+#track1-left {
+	width: 5px;
+	height: 9px;
+	float:left;
+	background: transparent url(imgs/lefttrack.png) no-repeat top left;
+}
+
+#sliderArea {
+	height: 20px;
+	width: 200px;
+	float:left;
+	background: transparent url(imgs/righttrack.png) no-repeat top right;
+	margin-right:10px;
+}
+
+label.small {
+	font-size:10px;
+}
+
+img.tableImg {
+	float:left;
+}
+
+.hoverTd {
+	background-color:yellow;
+}
+
+.miniImg {
+	position:absolute;
+}
+
+.bulletStyle {
+	width:5px;
+	height:5px;
+}
+
+.attList li{
+	margin-bottom:10px;
+}
+
+#pdfList {
+	width:700px;
+	height:300px;
+	overflow:scroll;
+	border:1px solid #ccc;
+	background-color:#fff;
+}
+
+#pdfList li {
+	padding:5px 10px 5px 10px;
+	cursor:pointer;
+}
+
+#pdfList li:hover {
+	background-color:#FFFF99;
+}
+
+#pdfList .selected {
+	background-color:#FFFF33;
+}
+
+#linkedPdfBox {
+	margin-top:10px;
+	border:3px solid #999;
+	padding:5px 5px 0px 5px;
+	overflow:hidden;
+	text-align: center;
+}
+
+#linkedPdfBox button {
+	float:right;
+}
+
+#linkInputBox {
+	margin-bottom:10px;
+	display:none;
+}
+
+#subjectImg {
+	float:left;
+	clear:left;
+}
