@@ -824,7 +824,7 @@ var Editor = new Class({
 											el.push('m');
 											(e.getFirst().hasClass('bordered')) ? el.push('b') : el.push('n');
 											(e.getFirst().retrieve('link')) ? el.push(e.getFirst().retrieve('link')) : el.push(0);
-											el.push(e.getFirst().getStyle('width').toInt());														alert(el);
+											el.push(e.getFirst().getStyle('width').toInt());
 										}
 									}
 								}
