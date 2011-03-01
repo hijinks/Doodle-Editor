@@ -86,6 +86,7 @@ function linkPdfBox(pdf){
 	linkedPdfBox.appendChild(closePdfBox);
 	linkedPdfBox.inject($('toolbar'), 'after');	
 }
+function goToImages(){ document.location.href = cmsPath+'/images'}
 function goBack(){ document.location.href = cmsPath+'/'+$('editorType').value; }
 function checkIfChanged(){
 	if($('block1').empty()){
