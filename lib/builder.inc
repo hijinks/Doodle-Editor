@@ -235,7 +235,7 @@ class Document {
 					if($type == 'e'){
 						$newHref = 'mailto:'.$e[1];
 					} else if($type == 'l'){
-						$newHref = preg_replace('/SITE/', 'http://doodlefluxtest.com', $e[1]);
+						$newHref = preg_replace('/SITE/', 'http://doodleeditor.com', $e[1]);
 					}
 					$linkEl->setAttribute('href', $newHref);
 					$styleString = '';
@@ -256,15 +256,15 @@ class Document {
 					$storedSrc = $e[1];
 					$storedAlign = $e[2];
 					$storedBorder = $e[3];
-					$storedLink = preg_replace('/SITE/', 'http://doodlefluxtest.com', $e[4]);
+					$storedLink = preg_replace('/SITE/', 'http://doodleeditor.com', $e[4]);
 					$storedWidth = $e[5];
 					$newImg = $this->createElement('img');
 					$pdfLink = false;
 					if(preg_match('/\.pdf$/',$storedSrc)){
 						$pdfLink = $this->createElement('a');
-						$pdfLink->setAttribute('href', '/pdfs/'.$storedSrc);
+						$pdfLink->setAttribute('href', '/public_assets/pdfs/'.$storedSrc);
 						$pdfLink->setAttribute('title', $storedSrc);
-						$newImg->setAttribute('src', '/imgs/pdf_icon.png');
+						$newImg->setAttribute('src', '/public_assets/imgs/pdf_icon.png');
 					} else {
 						$newImg->setAttribute('src', $storedSrc);
 					}

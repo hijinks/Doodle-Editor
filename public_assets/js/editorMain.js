@@ -747,43 +747,45 @@ var Editor = new Class({
 							thisBlock.push(textElements);					
 						break;
 						case 'table':
-							if(e.getFirst().tagName == 'TABLE'){
-								thisBlock.push('t');
-								rows = [];
-								e.getFirst().getChildren().each(function(e){ // thead or tbody
-									t = e;
-									e.getChildren().each(function(e){ // each row
-										row = [];
-										if(t.tagName == 'THEAD'){
-											row.push('h');
-										} else {
-											row.push('b');
-										}
-										columns = [];
-										e.getChildren().each(function(e){ // each cell
-											textElements = this.saveFormat(e);
-											if(textElements[0] != null){
-												columns.push(textElements);
+							if(e.getFirst()){
+								if(e.getFirst().tagName == 'TABLE'){
+									thisBlock.push('t');
+									rows = [];
+									e.getFirst().getChildren().each(function(e){ // thead or tbody
+										t = e;
+										e.getChildren().each(function(e){ // each row
+											row = [];
+											if(t.tagName == 'THEAD'){
+												row.push('h');
 											} else {
-												columns.push(0);
+												row.push('b');
 											}
+											columns = [];
+											e.getChildren().each(function(e){ // each cell
+												textElements = this.saveFormat(e);
+												if(textElements[0] != null){
+													columns.push(textElements);
+												} else {
+													columns.push(0);
+												}
+											}.bind(this));
+											row.push(columns);
+											rows.push(row);
 										}.bind(this));
-										row.push(columns);
-										rows.push(row);
 									}.bind(this));
-								}.bind(this));
-								thisBlock.push(rows);
-								if(e.getFirst().hasClass('prevHidden')){
-									thisBlock.push(1);
-								} else {
-									thisBlock.push(0);
+									thisBlock.push(rows);
+									if(e.getFirst().hasClass('prevHidden')){
+										thisBlock.push(1);
+									} else {
+										thisBlock.push(0);
+									}
+									if(e.getFirst().hasClass('centred')){
+										thisBlock.push(1);
+									} else {
+										thisBlock.push(0);
+									}						
 								}
-								if(e.getFirst().hasClass('centred')){
-									thisBlock.push(1);
-								} else {
-									thisBlock.push(0);
-								}						
-							}					
+							}		
 						break;
 						case 'list':
 							thisBlock.push('l');
