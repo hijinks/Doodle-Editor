@@ -1,0 +1,214 @@
+/* Reset Stuff */
+html, body, div, span, applet, object, iframe, p,blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+html {
+	height:100%;
+}
+
+::-moz-focus-inner { border: 0; }
+
+a {
+	text-decoration:none;
+}
+
+a:hover {
+	text-decoration:underline;
+}
+
+small {
+	font-size:12px;
+	color:#3b5283;
+	
+}
+
+hr {
+	float:left;
+	clear:both;
+	width:100%;
+}
+
+body {
+	line-height: 1;
+	font-family: sans-serif;
+	font-weight: normal;
+	padding: 0;
+	margin: 0;
+	color:#333;
+	height:100%;
+	background:url('imgs/lightwood.png') repeat center 200px ;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+:focus {
+	outline: 0;
+}
+
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+p, h1, h2, h3  {
+	font-weight: normal;
+}
+
+.warning {
+	color:red;
+}
+
+h1,h2,h3 {
+	color:#333;
+	letter-spacing: 2px;
+}
+
+h3 { font-size: 17px; }
+h2 { font-size: 20px; }
+h1 { font-size: 30px }
+
+th {
+	font-weight: normal;
+}
+
+/* Main */
+
+#wrap {
+	width:800px;
+	margin:30px auto 0 auto;
+}
+
+img.right {
+	float:right;
+	clear:right;
+	margin:0 0 10px 10px;
+	display:inline;
+}
+
+img.left {
+	float:left;
+	clear:left;
+	margin:0 10px 10px 0;
+	display:inline;
+}
+
+.inlineImageRow {
+	text-align: center;
+	margin-bottom:10px;
+}
+
+.p_table {
+	border:1px solid #777;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.column {
+	float:left;
+}
+
+.single {
+	width:700px;
+}
+
+.double {
+	width:345px;
+}
+
+.triple {
+	width:254px;
+}
+
+.p_table th {
+	border:0;
+	border-bottom:1px solid #777;
+	border-left:1px solid #777;
+	background-color:#ccc;
+	padding:4px;
+}
+.p_table th:first-child {
+	border-left:0;
+}
+.p_table td {
+	padding:5px;
+	border-left:1px solid #777;
+}
+.p_table td:first-child {
+	border:0;
+}
+
+.p_list {
+	padding:0;
+	margin-left:20px;
+}
+
+.p_list li {
+	margin-bottom:10px;
+}
+
+.oddRow {
+	background-color:#ddd;
+}
+.evenRow {
+	background-color:#f1f1f1;
+}
+
+.p_h1, .p_h2, .p_h3 {
+	padding:0px 30px 0px 30px;
+}
+
+.p_ {
+	padding:20px 30px 20px 30px;
+	margin-bottom:10px;
+	line-height: 190%;
+	overflow: hidden;
+}
+
+.p_ img.bordered {
+	border:1px solid #ccc;
+}
+
+.centred {
+	margin:0 auto;
+}
+
+.hidden {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.hidden th, .hidden td {
+	padding:5px;
+}
