@@ -107,13 +107,15 @@ h1, h2, h3 {
 	right:0;
 	position: absolute;
 	z-index:200;
+	background:url('imgs/black.png') repeat;
+	visibility:hidden;
 }
 
 #overlayTool {
-	width:700px;
+	width:800px;
 	border:1px solid #999;
 	background-color:#eee;
-	margin:100px auto 0 auto;
+	margin:50px auto 0 auto;
 	padding:10px;
 }
 

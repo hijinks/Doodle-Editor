@@ -24,6 +24,14 @@ document.addEvent('domready', function(){
 	if(!$('dateVal').value){
 		$('dateVal').setProperty('value') = new Date().getTime();
 	}
+	window.addEvent('scroll', function(){
+		docScrollTop = document.documentElement.scrollTop.toInt();
+		if($('overlayTool') && ($('overlayTool').getHeight().toInt() < window.getSize().y) && ((window.getSize().y.toInt()+docScrollTop) <= document.body.getStyle('height').toInt())){
+			$('overlayTool').setStyle('margin-top',(docScrollTop+50)+'px');
+		}
+	});
+	window.addEvent('resize', function(){ $('overlayWrap').setStyle('min-height', $(document.body).getScrollSize().y+'px'); });
+	$('overlayWrap').setStyle('min-height', $(document.body).getScrollSize().y+'px');
 	dPicker = new datePicker($('overlayWrap'), {
     	trigger: $('editDate'),
     	timestampOutput: $('dateVal'),
@@ -38,7 +46,8 @@ document.addEvent('domready', function(){
 	}
 	$('pdf').addEvent('change')
 	$('pdfButton').addEvent('click', function(){
-		toolCont = new Element('div', { 'id':'overlayTool' });
+		if($('overlayTool')) return false;
+		tools = new overlay();
 		closeBtn = new Element('input', { 'type':'button', value:'Just close', 'class':'button' });
 		pdfList = new Element('ul', {'id':'pdfList' });
 		req = new Request.JSON({
@@ -56,14 +65,14 @@ document.addEvent('domready', function(){
 						$$('#pdfList .selected').invoke('removeClass', 'selected');
 						this.addClass('selected');
 						linkPdfBox(this.get('text').clean());
-						this.getParent().getParent().destroy();
+						tools.dispose();
 					});
 					pdfList.appendChild(listItem);
 				});
-				toolCont.appendChild(closeBtn);
-				toolCont.appendChild(pdfList);
-				closeBtn.addEvent('click', function(){ this.getParent().destroy(); });
-				$('overlayWrap').appendChild(toolCont);
+				tools.container.appendChild(closeBtn);
+				tools.container.appendChild(pdfList);
+				closeBtn.addEvent('click', function(){ tools.dispose(); });
+				tools.create();
 			}
 		});
 		req.send();
@@ -86,10 +95,10 @@ function linkPdfBox(pdf){
 	linkedPdfBox.appendChild(closePdfBox);
 	linkedPdfBox.inject($('toolbar'), 'after');	
 }
-function goToImages(){ document.location.href = cmsPath+'/images'}
+function goToImages(){ if(confirm('Continue to images? Unsaved content will be lost.')) document.location.href = cmsPath+'/images'}
 function goBack(){ document.location.href = cmsPath+'/'+$('editorType').value; }
 function checkIfChanged(){
-	if($('block1').empty()){
+	if(!$('block1').getChildren()[0]){
 		goBack();
 	} else {
 		if(confirm('Are you sure you want to exit?')) goBack();

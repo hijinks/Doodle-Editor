@@ -280,6 +280,8 @@ var blockBuilder = new Class({ // Rebuilds block from database, assumes that all
 						img.store('link', stored_link);
 					}
 					img.addEvent('click', function(){
+						if($('overlayTool')) return false;
+						tools = new overlay();
 						toolCont = new Element('div', { 'id':'overlayTool', 'style':'height:400px;' });
 						sidebar = new Element('div', { 'id':'imageResizeTools' });
 						prevImg = this.clone();
@@ -293,9 +295,9 @@ var blockBuilder = new Class({ // Rebuilds block from database, assumes that all
 							'clear':'left'
 						});
 						a = new imageEditor(this); // returns list of tools
-						a.makeTools(this.getStyle('height').toInt(), this.getStyle('width').toInt(), prevImg).each(function(e){ toolCont.appendChild(e); });
-						toolCont.appendChild(prevImg);
-						$('overlayWrap').appendChild(toolCont);
+						a.makeTools(this.getStyle('height').toInt(), this.getStyle('width').toInt(), prevImg, tools);
+						tools.container.appendChild(prevImg);
+						tools.create();
 						sizeSlider = new Slider($('sliderArea'), $('sliderHandle'), {
 							range: [10, 600],
 							steps: 600,

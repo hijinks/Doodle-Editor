@@ -22,6 +22,7 @@ var datePicker = new Class({
 			});
 			if(this.options.trigger){
 				this.options.trigger.addEvent('click', function(){
+					this.container.setStyle('visibility', 'visible');
 					this.options.trigger.setStyle('visibility', 'hidden');
 					this.assemble();
 				}.bind(this));
@@ -145,6 +146,7 @@ var datePicker = new Class({
 	},
 	disassemble: function(){
 		this.container.empty();
+		this.container.setStyle('visibility', 'hidden');
 		this.options.trigger.setStyle('visibility', 'visible');
 		document.removeEvents('click');
 	}

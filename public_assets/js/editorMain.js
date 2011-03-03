@@ -143,7 +143,8 @@ var Editor = new Class({
 					'width':s.x+'px'
 				});
 				newImg.addEvent('click', function(){
-					toolCont = new Element('div', { 'id':'overlayTool', 'style':'height:400px;' });
+					if($('overlayTool')) return false;
+					tools = new overlay();
 					sidebar = new Element('div', { 'id':'imageResizeTools' });
 					prevImg = new Element('img');
 					prevImg.setProperties({
@@ -157,9 +158,9 @@ var Editor = new Class({
 						'clear':'left'
 					});
 					a = new imageEditor(this); // returns list of tools
-					a.makeTools(this.getStyle('height').toInt(), this.getStyle('width').toInt(), prevImg).each(function(e){ toolCont.appendChild(e); });
-					toolCont.appendChild(prevImg);
-					$('overlayWrap').appendChild(toolCont);
+					a.f(this.getStyle('height').toInt(), this.getStyle('width').toInt(), prevImg, tools);
+					tools.container.appendChild(prevImg);
+					tools.create();
 					sizeSlider = new Slider($('sliderArea'), $('sliderHandle'), {
 						range: [10, 600],
 						steps: 600,
@@ -465,6 +466,7 @@ var Editor = new Class({
 		}
 	},
 	stylise: function(styleType){  // Change spans with selected class (the yellow ones!)
+		if($('overlayTool')) return false;
 		linkArray = [];
 		$$('span.selected').each(function(e){
 			switch(styleType){
@@ -560,24 +562,23 @@ var Editor = new Class({
 			contiguousText = [];
 			contiguous.each(function(e){ iT ? contiguousText.push(e.innerText) : contiguousText.push(e.textContent); });
 			linkText = contiguousText.join(' ');
-			toolCont = new Element('div', { 'id':'overlayTool' });
-			toolCont.setStyle('margin-top','100px');
+			tools = new overlay();
 			if(linkType == 'link'){
-				this.linkOptions(linkText, false, contiguous).each(function(e){ toolCont.appendChild(e); });
+				this.linkOptions(linkText, false, contiguous, tools);
 			} else if(linkType == 'email'){
-				this.emailOptions(linkText, false, contiguous).each(function(e){ toolCont.appendChild(e); });
+				this.emailOptions(linkText, false, contiguous, tools);
 			}
-			$('overlayWrap').appendChild(toolCont);			
+			tools.create();	
 		}
 	},
-	linkOptions: function(linkText, link, oldSpans){ // Buttons and behaviours for new link panel
+	linkOptions: function(linkText, link, oldSpans, tools){ // Buttons and behaviours for new link panel
 		if(!link) link = '';
 		updateBtn = new Element('input', { 'type':'button', 'value':'Update and close', 'class':'button' });
 		closeBtn = new Element('input', { 'type':'button', 'value':'Just close', 'class':'button' });
 		httpSpan = new Element('span', { 'style':'margin-right:5px' });
 		httpSpan.set('text','http://');
 		hrefInput = new Element('input', { 'type':'text', 'value':link, 'class':'singleLine' });
-		closeBtn.addEvent('click', function(){ this.getParent().destroy(); });
+		closeBtn.addEvent('click', function(){ tools.dispose(); });
 		updateBtn.addEvent('click', function(){
 			link = hrefInput.value;
 			n = links.length;
@@ -606,18 +607,18 @@ var Editor = new Class({
 					fakeLink.replaces(oldSpans[0]);
 				}
 			}
-			updateBtn.getParent().destroy();
+			tools.dispose();
 		}.bind(this));
-		return [updateBtn, closeBtn, httpSpan, hrefInput];
+		[updateBtn, closeBtn, httpSpan, hrefInput].invoke('inject', tools.container);
 	},
-	emailOptions: function(linkText, link, oldSpans){
+	emailOptions: function(linkText, link, oldSpans, tools){
 		if(!link) link = '';
 		updateBtn = new Element('input', { 'type':'button', 'value':'Update and close', 'class':'button' });
 		closeBtn = new Element('input', { 'type':'button', 'value':'Just close', 'class':'button' });
 		mailtoSpan = new Element('span', { 'style':'margin-right:5px' });
 		mailtoSpan.set('text','mailto:');
 		mailtoInput = new Element('input', { 'type':'text', 'value':link, 'class':'singleLine' });
-		closeBtn.addEvent('click', function(){ this.getParent().destroy() });
+		closeBtn.addEvent('click', function(){ tools.dispose(); });
 		updateBtn.addEvent('click', function(){
 			link = mailtoInput.value;
 			n = links.length;
@@ -646,9 +647,9 @@ var Editor = new Class({
 					fakeEmail.replaces(oldSpans[0]);
 				}
 			}
-			updateBtn.getParent().destroy();
+			tools.dispose();
 		}.bind(this));
-		return [updateBtn, closeBtn, mailtoSpan, mailtoInput];	
+		[updateBtn, closeBtn, mailtoSpan, mailtoInput].invoke('inject', tools.container);	
 	},
 	assemble: function(){ // Initiated on page load - adds the block canvas and button toolbar to adminwrap
 		this.container.appendChild(this.toolbar);
@@ -896,25 +897,29 @@ var block = new Class({
 			this.block.addClass('list');
 			this.block.set('text','Double click to create list');
 			this.block.addEvent('dblclick', function(){ // Double click to edit something
-				toolCont = new Element('div', { 'id':'overlayTool' });
-				this.listOptions().each(function(e){ toolCont.appendChild(e); });
-				$('overlayWrap').appendChild(toolCont);
+				if($('overlayTool')) return false;
+				if($('overlayTool')) return false;
+				tools = new overlay();
+				this.listOptions(tools);
+				tools.create();
 			}.bind(this));
 		} else if(this.type == 'table'){
 			this.block.addClass('table');
 			this.block.set('text', 'Double click to create table');
 			this.block.addEvent('dblclick', function(){
-				toolCont = new Element('div', { 'id':'overlayTool', 'style':'width:800px;' });
-				this.tableOptions().each(function(e){ toolCont.appendChild(e); });
-				$('overlayWrap').appendChild(toolCont);
+				if($('overlayTool')) return false;
+				tools = new overlay();
+				this.tableOptions(tools);
+				tools.create();
 			}.bind(this));
 		} else if(this.type == 'div'){
 			this.block.addClass('div');
 			this.block.set('text', 'Double click to set div options');
 			this.block.addEvent('dblclick', function(){
-				toolCont = new Element('div', { 'id':'overlayTool', 'style':'width:800px;' });
-				this.divOptions().each(function(e){ toolCont.appendChild(e); });
-				$('overlayWrap').appendChild(toolCont);
+				if($('overlayTool')) return false;
+				tools = new overlay();
+				this.divOptions(tools);
+				tools.create();
 			}.bind(this));
 		} else { // If editable text block
 			switch(this.type){
@@ -943,17 +948,15 @@ var block = new Class({
 				break;
 			}
 			this.block.addEvent('dblclick', function(){
-				toolCont = new Element('div', { id:'overlayTool' });
-				this.textOptions().each(function(e){ toolCont.appendChild(e); });
-				$('overlayWrap').appendChild(toolCont);
+				if($('overlayTool')) return false;
+				tools = new overlay();
+				this.textOptions(tools);
+				tools.create();
 			}.bind(this));
 		}
 		blockList.appendChild(this.block);
 	},
-	overlayScroll: function(overlay){
-		scroll = document.body.getScroll();		
-	},
-	textOptions: function(){ // Options for H1, H2, H3 and para blocks
+	textOptions: function(tools){ // Options for H1, H2, H3 and para blocks
 		updateBtn = new Element('input', { 'type':'button', 'value':'Update and close', 'class':'button' });
 		closeBtn = new Element('input', { 'type':'button', 'value':'Just close', 'class':'button' });
 		deleteBtn = new Element('input', { 'type':'button', 'value':'Delete block', 'class':'button' });
@@ -965,9 +968,9 @@ var block = new Class({
 		} else {
 			textarea.value = iT ? this.block.getChildren()[0].innerText : this.block.getChildren()[0].textContent;
 		}
-		closeBtn.addEvent('click', function(){ this.getParent().destroy(); });
+		closeBtn.addEvent('click', function(){ tools.dispose(); });
 		deleteBtn.addEvent('click', function(){ 
-			deleteBtn.getParent().destroy();
+			tools.dispose();
 			this.block.destroy();
 		}.bind(this));
 		updateBtn.addEvent('click', function(){
@@ -980,11 +983,11 @@ var block = new Class({
 			} else {
 				this.block.getFirst().set('text',textarea.value.replace(/\n|\t|\r/g, ''));			
 			}
-			updateBtn.getParent().destroy();
+			tools.dispose();
 		}.bind(this));
-		return [updateBtn, closeBtn, deleteBtn, warningSpan, textarea];
+		[updateBtn, closeBtn, deleteBtn, warningSpan, textarea].invoke('inject', tools.container);
 	},
-	listOptions: function(){ // Lists
+	listOptions: function(tools){ // Lists
 		updateBtn = new Element('input', { 'type':'button', 'value':'Update and close', 'class':'button' });
 		closeBtn = new Element('input', { 'type':'button', 'value':'Just close', 'class':'button' });
 		deleteBtn = new Element('input', { 'type':'button', 'value':'Delete block', 'class':'button' });
@@ -997,9 +1000,9 @@ var block = new Class({
 			iT ? opt.innerText = s : opt.textContent = s;
 			listStyleSelect.appendChild(opt);
 		});
-		closeBtn.addEvent('click', function(){ this.getParent().destroy(); });
+		closeBtn.addEvent('click', function(){ tools.dispose(); });
 		deleteBtn.addEvent('click', function(){ 
-			deleteBtn.getParent().destroy();
+			tools.dispose();
 			this.block.destroy();
 		}.bind(this));
 		values = false;
@@ -1091,11 +1094,11 @@ var block = new Class({
 				this.block.empty();
 				this.block.appendChild(saveList);			
 			}
-			updateBtn.getParent().destroy();
+			tools.dispose();
 		}.bind(this));
-		return [updateBtn, closeBtn, deleteBtn, rowBtn, delRowBtn, listStyleSelect, editList];
+		[updateBtn, closeBtn, deleteBtn, rowBtn, delRowBtn, listStyleSelect, editList].invoke('inject', tools.container);
 	},
-	tableOptions: function(){ // Tables
+	tableOptions: function(tools){ // Tables
 		updateBtn = new Element('input', { 'type':'button', 'value':'Update and close', 'class':'button' });
 		closeBtn = new Element('input', { 'type':'button', 'value':'Just close', 'class':'button' });
 		deleteBtn = new Element('input', { 'type':'button', 'value':'Delete block', 'class':'button' });
@@ -1103,16 +1106,16 @@ var block = new Class({
 		colBtn = new Element('input', { 'type':'button', 'value':'+1 column', 'class':'button' });
 		rerowBtn = new Element('input', { 'type':'button', 'value':'-1 row', 'class':'button' });
 		recolBtn = new Element('input', { 'type':'button', 'value':'-1 column', 'class':'button' });
-		closeBtn.addEvent('click', function(){ closeBtn.getParent().destroy();}.bind(this));
+		closeBtn.addEvent('click', function(){ tools.dispose(); }.bind(this));
 		cenCheck = new Element('input', { 'type':'checkbox', 'id':'cenCheck'});
 		visCheck = new Element('input', { 'type':'checkbox', 'id':'visCheck'});
 		visSpan = new Element('label', { 'for':'visCheck', 'class':'small'});
 		cenSpan = new Element('label', { 'for':'cenCheck', 'class':'small'});
 		visSpan.set('text',' Invisible: ');
 		cenSpan.set('text',' Centred: ');
-		deleteBtn.addEvent('click', function(){ 
-			deleteBtn.getParent().destroy();
-			this.block.destroy();
+		deleteBtn.addEvent('click', function(){
+			this.block.destroy();	
+			tools.dispose();
 		}.bind(this));
 		rows = [];
 		editTable = new Element('table', { 'id':'editTable', 'class':'editTable uncentred visible' });
@@ -1232,7 +1235,8 @@ var block = new Class({
 							oldWidth = mini.alt;
 							restoredImg = new Element('img', { 'src':mini.src, 'style':'width:'+oldWidth+';height:auto;', 'class':'tableImg'});
 							restoredImg.addEvent('click', function(){
-								toolCont = new Element('div', { 'id':'overlayTool', 'style':'height:400px;' });
+								if($('overlayTool')) return false;
+								tools2 = new overlay();
 								sidebar = new Element('div', { 'id':'imageResizeTools' });
 								prevImg = this.clone();
 								prevImg.setProperties({
@@ -1245,9 +1249,9 @@ var block = new Class({
 									'empty':'left'
 								});
 								a = new imageEditor(this); // returns list of tools
-								a.makeTools(this.getStyle('height').toInt(), this.getStyle('width').toInt(), prevImg).each(function(e){ toolCont.appendChild(e); });
-								toolCont.appendChild(prevImg);
-								$('overlayWrap').appendChild(toolCont);
+								a.makeTools(this.getStyle('height').toInt(), this.getStyle('width').toInt(), prevImg, tools2);
+								tools2.container.appendChild(prevImg);
+								tools2.create();
 								sizeSlider = new Slider($('sliderArea'), $('sliderHandle'), {
 									range: [10, 600],
 									steps: 600,
@@ -1264,7 +1268,7 @@ var block = new Class({
 				}.bind(this));
 			}.bind(this));
 			this.block.appendChild(saveTable);
-			updateBtn.getParent().destroy();
+			tools.dispose();
 			this.blockList.setStyle('display', 'block');
 		}.bind(this));
 		colBtn.addEvent('click', function(){
@@ -1297,9 +1301,9 @@ var block = new Class({
 				});
 			}
 		});
-		return [updateBtn, closeBtn, deleteBtn, rowBtn, colBtn, rerowBtn, recolBtn, visSpan, visCheck, cenSpan, cenCheck, editTable];
+		[updateBtn, closeBtn, deleteBtn, rowBtn, colBtn, rerowBtn, recolBtn, visSpan, visCheck, cenSpan, cenCheck, editTable].invoke('inject', tools.container);
 	},
-	divOptions: function(container){
+	divOptions: function(tools){
 		updateBtn = new Element('input', { 'type':'button', 'value':'Update and close', 'class':'button' });
 		closeBtn = new Element('input', { 'type':'button', 'value':'Just close', 'class':'button' });
 		deleteBtn = new Element('input', { 'type':'button', 'value':'Delete block', 'class':'button' });
@@ -1326,9 +1330,9 @@ var block = new Class({
 		attributeLi2.appendChild(classInput);
 		attributeList.appendChild(attributeLi1);
 		attributeList.appendChild(attributeLi2);
-		closeBtn.addEvent('click', function(){ this.getParent().destroy(); });
+		closeBtn.addEvent('click', function(){ tools.dispose();});
 		deleteBtn.addEvent('click', function(){ 
-			deleteBtn.getParent().destroy();
+			tools.dispose();
 			this.block.destroy();
 		}.bind(this));
 		updateBtn.addEvent('click', function(){
@@ -1342,9 +1346,9 @@ var block = new Class({
 				item.appendChild(inpSpan);
 			});
 			this.block.appendChild(attributeList);
-			updateBtn.getParent().destroy();
+			tools.dispose();
 		}.bind(this));
-		return [updateBtn, closeBtn, deleteBtn, attributeList];	
+		[updateBtn, closeBtn, deleteBtn, attributeList].invoke('inject', tools.container);	
 	},
 	spannerise: function(container){ // Convert saved plaintext into a series of selectable inline spans
 		words = [];
@@ -1435,6 +1439,24 @@ var block = new Class({
 	}
 });
 
+var overlay = new Class({
+	initialize : function(){
+		this.container = new Element('div', { id:'overlayTool' });
+	},
+	create: function(){
+		$('overlayWrap').appendChild(this.container);
+		docScrollTop = document.documentElement.scrollTop.toInt();
+		if((this.container.getHeight().toInt() < window.getSize().y) && ((window.getSize().y.toInt()+docScrollTop) <= document.body.getStyle('height').toInt())){
+			this.container.setStyle('margin-top',(docScrollTop+50)+'px');
+		}		
+		$('overlayWrap').setStyle('visibility', 'visible');
+	},
+	dispose: function(){
+		$('overlayWrap').setStyle('visibility', 'hidden');
+		this.container.destroy();
+	}
+});
+
 var imageGallery = new Class({
 	initialize: function(images,mediaType){
 		fx = new Fx.Morph('imageGallery', { 'duration':100 });
@@ -1457,7 +1479,7 @@ var imageGallery = new Class({
 		this.makeRow();
 	},
 	makeRow: function(){
-		if(this.imgs != 'notset'){
+		if(this.imgs != 'notset' || !this.imgs[0]){
 			this.imageRow = new Element('div', { 'id':'imageRow' });
 			this.imageRow.setStyle('opacity', '0');
 			images.each(function(imageName){
@@ -1486,7 +1508,8 @@ var imageEditor = new Class({ // Image resizing tools
 	initialize: function(oImg){
 		this.oImg = oImg;
 	},
-	makeTools: function(oHeight, oWidth, subjectImg){
+	makeTools: function(oHeight, oWidth, subjectImg, tools){
+		tools.container.setStyle('height', '400px');
 		updateBtn = new Element('input', { 'type':'button', 'value':'Update and close', 'class':'button' });
 		closeBtn = new Element('input', { 'type':'button', 'value':'Just close', 'class':'button' });
 		deleteBtn = new Element('input', { 'type':'button', 'value':'Delete Image', 'class':'button' });
@@ -1518,16 +1541,16 @@ var imageEditor = new Class({ // Image resizing tools
 			} else {
 				this.oImg.store('link', '');
 			}
-			updateBtn.getParent().destroy();
+			tools.dispose();
 		}.bind(this));
-		closeBtn.addEvent('click', function(){ this.getParent().destroy(); });
+		closeBtn.addEvent('click', function(){ tools.dispose(); });
 		deleteBtn.addEvent('click', function(){
 			if(this.oImg.hasClass('middle')){
 				this.oImg.getParent().destroy();
 			} else {
 				this.oImg.destroy();
 			}
-			deleteBtn.getParent().destroy();
+			tools.dispose();
 		}.bind(this));
 		closeBtn.setStyle('float','left');
 		borderBoxLabel = new Element('label', { 'class':'small' });
@@ -1566,6 +1589,6 @@ var imageEditor = new Class({ // Image resizing tools
 			linkInput.set('value', this.oImg.retrieve('link').replace(/^http:\/\//, ''));
 			linkInputCheck.checked = 1;			
 		}
-		return [span, sliderWrap, updateBtn, closeBtn, deleteBtn, borderBoxLabel, borderBox, linkInputCheckLabel, linkInputCheck, linkInputBox];
+		[span, sliderWrap, updateBtn, closeBtn, deleteBtn, borderBoxLabel, borderBox, linkInputCheckLabel, linkInputCheck, linkInputBox].invoke('inject', tools.container);
 	}
 });
