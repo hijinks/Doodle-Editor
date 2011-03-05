@@ -27,8 +27,8 @@
 			<ul id="editorBtns">
 
 				<li><input type="button" value="Save" id="saveBtn"></li>
-				<li><input type="button" value="Go Back"></li>
-				<li><a href="/images" title="" target="_blank"><button>Go to image section</button></a></li>
+				<li><input type="button" value="Go Back" onclick="checkIfChanged()"></li>
+				<li><button onclick="goToImages()">Go to image section</button></a></li>
 				<li><input type="hidden" id="editorType" value="<?php echo $editorType; ?>"></li>
 			</ul>
 			<div id="alertDiv"></div>

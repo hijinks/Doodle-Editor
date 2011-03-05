@@ -79,8 +79,7 @@ var datePicker = new Class({
 					td.addEvent('click', function(){
 						this.options.dateObj.set('date', s);
 						if(this.options.timestampOutput) this.options.timestampOutput.value = Math.floor((this.options.dateObj.get('time'))/1000);
-						if(this.options.formattedOutput)
-							this.options.formattedOutput.set('text', this.options.dateObj.format(this.options.timeFormat));
+						if(this.options.formattedOutput) this.options.formattedOutput.set('text', this.options.dateObj.format(this.options.timeFormat));
 						this.disassemble();
 					}.bind(this));
 				}

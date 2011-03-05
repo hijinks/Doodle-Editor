@@ -158,7 +158,7 @@ var Editor = new Class({
 						'clear':'left'
 					});
 					a = new imageEditor(this); // returns list of tools
-					a.f(this.getStyle('height').toInt(), this.getStyle('width').toInt(), prevImg, tools);
+					a.makeTools(this.getStyle('height').toInt(), this.getStyle('width').toInt(), prevImg, tools);
 					tools.container.appendChild(prevImg);
 					tools.create();
 					sizeSlider = new Slider($('sliderArea'), $('sliderHandle'), {

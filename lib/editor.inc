@@ -31,7 +31,7 @@ class LIB_Editor {
 							$ok = false;
 						}
 					}
-					return $this->saveNew($decoded[1],$decoded[2], $decoded[3], $decoded[4]);
+					return $this->saveNew($decoded[1], $decoded[2], $decoded[3], $decoded[4]);
 				} else if((int)$decoded[0]){
 					while($ok){
 						if(isset($decoded[$inc])){
@@ -41,7 +41,7 @@ class LIB_Editor {
 							$ok = false;
 						}
 					}
-					return $this->updateEditor($decoded[1], $decoded[2], $decoded[0], $decoded[3], $decoded[4 ]);
+					return $this->updateEditor($decoded[1], $decoded[2], $decoded[3], $decoded[4]);
 				}
 			} else { exit; }
 		}
@@ -65,7 +65,7 @@ class LIB_Editor {
 		return $insert;
 	}
 	
-	function updateEditor($titleDirty, $timeDirty, $id, $pdf, $thumbnail){
+	function updateEditor($titleDirty, $timeDirty, $pdf, $thumbnail){
 		$updateParams = array();
 		$updateParams['title'] = filter_var($titleDirty, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		$updateParams['time'] = array('FROM_UNIXTIME', filter_var($timeDirty, FILTER_SANITIZE_NUMBER_INT));
