@@ -155,7 +155,6 @@ var blockBuilder = new Class({ // Rebuilds block from database, assumes that all
 						tbody.appendChild(tr);
 					}
 				}.bind(this));
-				
 				table.appendChild(thead);
 				table.appendChild(tbody);
 				this.block.appendChild(table);
@@ -210,13 +209,11 @@ var blockBuilder = new Class({ // Rebuilds block from database, assumes that all
 					stored_style = e[4];
 					span = new Element('span');
 					if(e[5] != 13) span.setStyle('font-size',[5]+'px');
-					links.push(href);
 					if(e[2] == 'e'){
 						span.addClass('fakeEmail');
 					} else if(e[2] == 'l'){
 						span.addClass('fakeLink');
 					}
-					span.setProperty('id', 'link-'+(links.length-1));
 					span.addEvent('click', function(){	
 						if(this.hasClass('selected')){
 							this.setStyle('background-color','transparent');
@@ -224,13 +221,6 @@ var blockBuilder = new Class({ // Rebuilds block from database, assumes that all
 							this.setStyle('background-color','yellow');	
 						}
 						this.toggleClass('selected');
-					});
-					span.addEvent('mouseover', function(){
-						n = this.id.match(/[0-9]+/);
-						linkAlert(links[n], $('alertDiv'));
-					});
-					span.addEvent('mouseout', function(){
-						$$('.linkAlert').invoke('destroy');
 					});
 					if(stored_style[0]){
 						span.addClass('styled');
@@ -240,6 +230,8 @@ var blockBuilder = new Class({ // Rebuilds block from database, assumes that all
 							if(s == 'u') span.setStyle('text-decoration','underline');
 						});
 					}
+					span.store('tip:title', href);
+					linkTips.attach(span);
 					span.set('text',content);
 					spans.push(span);
 				break;
@@ -250,9 +242,13 @@ var blockBuilder = new Class({ // Rebuilds block from database, assumes that all
 					stored_link = e[4];
 					stored_width = e[5];
 					if(stored_src.match(/\.pdf$/i)){
-						img = new Element('img', { 'src':styleImagePath+'pdf_icon.png', 'title':'Click image to resize', 'title':stored_src,'alt':stored_src });						
+						img = new Element('img', { 'src':styleImagePath+'pdf_icon.png', 'title':'Click image to resize'});
+						img.store('type', 'pdf');
+						img.store('tip:title', stored_src);
+						linkTips.attach(img);
 					} else {
 						img = new Element('img', { 'src':stored_src, 'title':'Click image to resize' });				
+						img.store('type', 'img');
 					}
 
 					img.setStyles({
@@ -277,7 +273,8 @@ var blockBuilder = new Class({ // Rebuilds block from database, assumes that all
 						img.addClass('bordered');
 					}
 					if(stored_link){
-						img.store('link', stored_link);
+						img.store('tip:title', stored_link);
+						linkTips.attach(img);
 					}
 					img.addEvent('click', function(){
 						if($('overlayTool')) return false;

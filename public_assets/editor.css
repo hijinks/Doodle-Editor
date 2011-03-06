@@ -48,27 +48,26 @@ h1, h2, h3 {
 #editorBtns{
 	float:right;
 	list-style-type: none;
-	width:300px;
+	width:350px;
 	margin-top:-5px;
+	text-align:right;
 }
 
 #editorBtns a { text-decoration: none;}
 
 #editorBtns li {
-	float:right;
-	margin-left:10px;
+	display:inline-block;
 }
 
-#alertDiv {
-	width:100px;
-	float:right;
+#editorBtns #alertDiv {
+	margin-right:20px;	
 }
+
 .tooltip {
-	padding:3px;
-	background-color:blue;
-	font-size:0.7em;
+	padding:6px;
+	background-color:#333;
+	font-size:13px;
 	color:#fff;
-	border:1px solid #333;
 }
 
 :focus {
@@ -382,9 +381,6 @@ td.hoverBlock, th.hoverBlock {
 	text-decoration: underline;
 }
 
-.linkAlert {
-	color:green;
-}
 .previewOutline {
 	display:inline-block;
 }

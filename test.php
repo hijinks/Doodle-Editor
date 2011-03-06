@@ -14,6 +14,7 @@
 		<script src="/public_assets/js/mootools-1.3.js" type="text/javascript"></script>
 		<script src="/public_assets/js/mootools-1.3-more-date.js" type="text/javascript"></script>
 		<script src="/public_assets/js/mootools-1.3-more-drag.js" type="text/javascript"></script>
+		<script src="/public_assets/js/mootools-1.3-more-tips.js" type="text/javascript"></script>
 		<script src="/public_assets/js/datepicker.js" type="text/javascript"></script>
 		<script src="/public_assets/js/generic.js" type="text/javascript"></script>
 		<script src="/public_assets/js/editorMain.js" type="text/javascript"></script>
@@ -25,13 +26,12 @@
 		<div id="overlayWrap"></div>
 		<div style="margin-bottom:10px;">
 			<ul id="editorBtns">
-
-				<li><input type="button" value="Save" id="saveBtn"></li>
-				<li><input type="button" value="Go Back" onclick="checkIfChanged()"></li>
+				<li id="alertDiv"></li>
 				<li><button onclick="goToImages()">Go to image section</button></a></li>
+				<li><input type="button" value="Go Back" onclick="checkIfChanged()"></li>
+				<li><input type="button" value="Save" id="saveBtn"></li>
 				<li><input type="hidden" id="editorType" value="<?php echo $editorType; ?>"></li>
 			</ul>
-			<div id="alertDiv"></div>
 			<h1 id="header">Editor</h1>
 		</div>
 

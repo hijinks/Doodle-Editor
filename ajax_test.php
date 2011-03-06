@@ -13,15 +13,20 @@ switch($p[0]){
 		$editor = new LIB_Editor;
 		switch($p[2]){
 			case 'get':
-				$result = $editor->getEditor(array(unserialize(file_get_contents('save_sample'))));
+				$result = json_encode($editor->getEditor(array(unserialize(file_get_contents('save_sample')))));
 			break;
 			case 'update':
 				if(isset($_POST['ajax'])){
+					if($h = fopen('save_sample', 'w')){
+						if(fwrite($h, serialize($editor->input($_POST['ajax'])))){
+							$result = 'success';
+						} else {
+							$result = 'failed';
+						}
+						fclose($h);
+					}
 					
-					$h = fopen('save_sample', 'w');
-					$result =  fwrite($h, serialize($editor->input($_POST['ajax'])));
-					fclose($h);
-				}				
+				} 
 			break;
 		}
 	break;
@@ -30,7 +35,7 @@ switch($p[0]){
 			case 'pdfs':
 				$pdfs = array_map('basename', glob(PDF_PATH.'*.pdf'));
 				$pdfs = array_map('htmlentities', $pdfs);
-				$result = $pdfs;			
+				$result = json_encode($pdfs);			
 			break;
 			case 'selected':
 				$imgs = array(); 
@@ -41,11 +46,11 @@ switch($p[0]){
 						if(!empty($matches)) $imgs[] = $dir.'/'.$matches[0];
 					}
 				}
-				$result = $imgs;
+				$result = json_encode($imgs);
 			break;
 		}			
 	break;
 }
 
-echo json_encode($result);
+echo $result;
 ?>

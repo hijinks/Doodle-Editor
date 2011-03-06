@@ -36,7 +36,7 @@ document.addEvent('domready', function(){
     	trigger: $('editDate'),
     	timestampOutput: $('dateVal'),
     	formattedOutput: $('formatDate'),
-    	timeFormat: '%x'
+    	timeFormat: '%d/%m/%Y'
    	});
 	if($('editorID').value != 'new'){
 		getData($('editorID').value, $('editorCanvas'));

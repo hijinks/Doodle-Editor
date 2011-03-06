@@ -3,10 +3,10 @@
 var iT =((new Element('div')).innerText != undefined) ? true : false;
 // Decides if browser uses innerText or textContent and therefore removes potential for massive ballache.
 var links = [];
-
-function linkAlert (caption, div) { // linkAlerts for link mouseovers
-	div.set('html','<span class="linkAlert">'+caption+'</span>');
-}
+var linkTips = new Tips();
+linkTips.addEvent('show', function(tip, el){
+    tip.addClass('tooltip');
+});
 
 function range(min, max, step){
 	a = [];
@@ -230,7 +230,6 @@ var Editor = new Class({
 					if(!$('imageOutline')){
 						imageOutline = new Element('div', { 'id':'imageOutline', 'class':'previewOutline outline' });
 						imageOutline.inject(droppable, 'top');
-						$('alertDiv').empty();
 					}
 					if(draggable.offsetLeft < centre-50){
 						if(!$('imageOutline').hasClass('left')){
@@ -311,39 +310,9 @@ var Editor = new Class({
 	},
 	behaviours: function(e){ // Button behaviours
 		switch(e.id){
-			case 'newPara':
+			case 'newPara': case 'newH1': case 'newH2': case 'newH3': case 'newList': case 'newTable': case 'newDiv':
 				e.addEvent('click', function(){
-					new block(this.blockList, 'para');
-					if(this.sortables) this.makeSortable(1);
-				}.bind(this));		
-			break;
-			case 'newH1':
-				e.addEvent('click', function(){ 
-					new block(this.blockList, 'h1');
-					if(this.sortables) this.makeSortable(1);
-				}.bind(this));		
-			break;
-			case 'newH2':
-				e.addEvent('click', function(){ 
-					new block(this.blockList, 'h2');
-					if(this.sortables) this.makeSortable(1);
-				}.bind(this));		
-			break;
-			case 'newH3':
-				e.addEvent('click', function(){
-					new block(this.blockList, 'h3');
-					if(this.sortables) this.makeSortable(1);
-				}.bind(this));		
-			break;
-			case 'newList':
-				e.addEvent('click', function(){
-					new block(this.blockList, 'list');
-					if(this.sortables) this.makeSortable(1);
-				}.bind(this));		
-			break;
-			case 'newTable':
-				e.addEvent('click', function(){
-					new block(this.blockList, 'table');
+					new block(this.blockList, e.id.replace(/new/, '').toLowerCase());
 					if(this.sortables) this.makeSortable(1);
 				}.bind(this));		
 			break;
@@ -390,26 +359,8 @@ var Editor = new Class({
 					req.send();
 				});		
 			break;
-			case 'newDiv':
-				e.addEvent('click', function(){
-					new block(this.blockList, 'div');
-					if(this.sortables) this.makeSortable(1);
-				}.bind(this));			
-			break;
-			case 'newBold':
-				e.addEvent('click', function(){ this.stylise('bold'); }.bind(this));
-			break;
-			case 'newItalics':
-				e.addEvent('click', function(){ this.stylise('italics'); }.bind(this));
-			break;
-			case 'newLink':
-				e.addEvent('click', function(){ this.stylise('link'); }.bind(this));
-			break;
-			case 'newEmail':
-				e.addEvent('click', function(){ this.stylise('email'); }.bind(this));
-			break;
-			case 'newUnderline':
-				e.addEvent('click', function(){ this.stylise('underline'); }.bind(this));
+			case 'newBold': case 'newItalics': case 'newLink': case 'newEmail': case 'newUnderline':
+				e.addEvent('click', function(){ this.stylise( e.id.replace(/new/, '').toLowerCase()) }.bind(this));
 			break;
 			case 'destyle':
 				e.addEvent('click', function(){ this.stylise('destyle'); }.bind(this));
@@ -581,9 +532,7 @@ var Editor = new Class({
 		closeBtn.addEvent('click', function(){ tools.dispose(); });
 		updateBtn.addEvent('click', function(){
 			link = hrefInput.value;
-			n = links.length;
-			links[n] = link;
-			fakeLink = new Element('span', { 'class':'fakeLink', 'id':'link-'+n});
+			fakeLink = new Element('span', { 'class':'fakeLink'});
 			fakeLink.addEvent('click', function(){	
 				if(this.hasClass('selected')){
 					this.setStyle('background-color','transparent');
@@ -592,13 +541,8 @@ var Editor = new Class({
 				}
 				this.toggleClass('selected');
 			});
-			fakeLink.addEvent('mouseenter', function(){
-				n = this.id.match(/[0-9]+/);
-				linkAlert(links[n], $('alertDiv'));
-			});
-			fakeLink.addEvent('mouseleave', function(){
-				$$('.linkAlert').invoke('destroy');
-			});
+			fakeLink.store('tip:title', link);
+			linkTips.attach(fakeLink);
 			fakeLink.set('text', linkText);
 			for(i=0;i<oldSpans.length;i++){
 				if(i){
@@ -621,8 +565,6 @@ var Editor = new Class({
 		closeBtn.addEvent('click', function(){ tools.dispose(); });
 		updateBtn.addEvent('click', function(){
 			link = mailtoInput.value;
-			n = links.length;
-			links[n] = link;
 			fakeEmail = new Element('span', { 'class':'fakeEmail', 'id':'link-'+n});
 			fakeEmail.addEvent('click', function(){	
 				if(this.hasClass('selected')){
@@ -632,13 +574,6 @@ var Editor = new Class({
 				}
 				this.toggleClass('selected');
 			});
-			fakeEmail.addEvent('mouseenter', function(){
-				n = this.id.match(/[0-9]+/);
-				linkAlert(links[n], $('alertDiv'));
-			});
-			fakeEmail.addEvent('mouseleave', function(){
-				$$('.linkAlert').invoke('destroy');
-			});
 			fakeEmail.set('text',linkText);
 			for(i=0;i<oldSpans.length;i++){
 				if(i){
@@ -647,6 +582,8 @@ var Editor = new Class({
 					fakeEmail.replaces(oldSpans[0]);
 				}
 			}
+			fakeEmail.store('tip:title', link);
+			linkTips.attach(fakeEmail);
 			tools.dispose();
 		}.bind(this));
 		[updateBtn, closeBtn, mailtoSpan, mailtoInput].invoke('inject', tools.container);	
@@ -664,12 +601,12 @@ var Editor = new Class({
 				if(e.hasClass('fakeLink')){
 					p.push('a');
 					d = e.id.split('-');
-					p.push(links[d[1]]);
+					p.push(e.retrieve('tip:title'));
 					p.push('l');
 				} else if(e.hasClass('fakeEmail')){
 					p.push('a');
 					d = e.id.split('-');
-					p.push(links[d[1]]);
+					p.push(e.retrieve('tip:title'));
 					p.push('e');
 				} else {
 					p.push('t');
@@ -688,39 +625,38 @@ var Editor = new Class({
 					p.push(0);
 				}
 				textSizePx = e.getStyle('font-size').replace(/[a-z]+/, '');
-				if(textSizePx == '100%')
-					textSizePx = 13;
+				if(textSizePx == '100%') textSizePx = 13;
 				p.push(textSizePx);
-			} else if(e.tagName == 'IMG'){
-				p.push('i');
-				imageTitle = '';
-				if(e.getProperty('title')) imageTitle = e.getProperty('title');
-				if(imageTitle.match(/\.pdf$/)){
-					p.push(e.getProperty('title'));
-				} else {
-					p.push(e.src);
-				}
-				if(e.hasClass('right')) p.push('r');
-				if(e.hasClass('left')) p.push('l');
-				if(e.hasClass('tableImg')) p.push('t');
-				(e.hasClass('bordered')) ? p.push('b') : p.push('n');
-				(e.retrieve('link')) ? p.push(e.retrieve('link')) : p.push(0);
-				p.push(e.getWidth()-2);
-			} else if(e.tagName == 'DIV'){ // inline images are contained within a div, but to avoid confusion only save data for the image
+			} else if((e.tagName == 'IMG')||(e.tagName == 'DIV')){
+				image = e;
+				inline = false;
 				if(e.hasClass('inlineImageRow')){
-					if((e.getFirst().tagName == 'IMG') && (e.getFirst().hasClass('middle'))){
-						p.push('i');
-						if(e.getFirst().getProperty('title').match(/\.pdf$/)){
-							p.push(e.getFirst().getProperty('title'));
-						} else {
-							p.push(e.getFirst().src);
-						}
-						p.push('m');
-						(e.getFirst().hasClass('bordered')) ? p.push('b') : p.push('n');
-						(e.getFirst().retrieve('link')) ? p.push(e.getFirst().retrieve('link')) : p.push(0);
-						p.push(e.getFirst().getStyle('width').toInt()-2);
-					}
+					image = e.getFirst();
+					inline = true;
 				}
+				widthCorrect = 2;
+				p.push('i');
+				imageType = image.retrieve('type');
+				if(imageType == 'pdf' && image.retrieve('pdf')){
+					p.push(image.retrieve('pdf'));
+				} else {
+					p.push(image.src);
+				}
+				if(inline){
+					p.push('m')
+				} else {
+					if(image.hasClass('right')) p.push('r');
+					if(image.hasClass('left')) p.push('l');
+					if(image.hasClass('tableImg')) p.push('t');		
+				}
+				if(image.hasClass('bordered')){
+					p.push('b'); 
+					widthCorrect = widthCorrect+4;
+				} else {
+					p.push('n');
+				}
+				(image.retrieve('tip:title')) ? p.push(image.retrieve('tip:title')) : p.push(0);
+				p.push(image.getWidth()-widthCorrect);
 			}
 			a.push(p);
 		});
@@ -1365,19 +1301,13 @@ var block = new Class({
 				if(m = s.match(/\<\|[0-9]+\|[^\>]+\>/)){
 					p = m.toString();
 					o = p.match(/<\|[0-9]+\|/gi).toString();
-					n = o.substring(2,(o.length-1));
-					span.setProperty('id', 'link-'+n);
+					n = o.substring(2,(o.length-1)).toInt();
+					span.store('tip:title', links[n]);
+					linkTips.attach(span);
 					q = p.replace(/\<\|[0-9]+\|+/gi, '').toString();
 					s = q.substring(0,q.length-1).replace(/_/g, ' ');
-					span.addEvent('mouseenter', function(){
-						n = this.id.match(/[0-9]+/);
-						linkAlert(links[n], $('alertDiv'));
-					});
-					span.addEvent('mouseleave', function(){
-						$$('.linkAlert').invoke('destroy');
-					});
 					if(links[n].match(/\@/g)){
-						span.addClass('fakeEmail');						
+						span.addClass('fakeEmail');				
 					} else {
 						span.addClass('fakeLink');
 					}
@@ -1411,6 +1341,7 @@ var block = new Class({
 				container.appendChild(space);
 			}
 		}.bind(this));
+		links.empty();
 	},
 	substituteStyle: function(container){ // For links and text style, convert into unsubtle pseudo syntax when made into editable plaintext
 		words = [];
@@ -1429,8 +1360,8 @@ var block = new Class({
 					}
 				}
 				if(e.hasClass('fakeLink') || e.hasClass('fakeEmail')){
-					d = e.id.split('-');
-					text = '<|'+d[1]+'|'+text.replace(/\s/g, '_')+'>';
+					links.push(e.retrieve('tip:title'));
+					text = '<|'+(links.length-1)+'|'+text.replace(/\s/g, '_')+'>';
 				}
 				words.push(text);
 			}
@@ -1536,10 +1467,14 @@ var imageEditor = new Class({ // Image resizing tools
 					this.oImg.removeClass('bordered');
 				}				
 			}
-			if($('linkInput').get('value')){
-				this.oImg.store('link', $('linkInput').get('value'));
-			} else {
-				this.oImg.store('link', '');
+			if(this.oImg.retrieve('type') != 'pdf'){
+				if($('linkInput').get('value')){
+					this.oImg.store('tip:title', $('linkInput').get('value'));
+					linkTips.attach(this.oImg);
+				} else {
+					this.oImg.eliminate('tip:title', '');
+					try{linkTips.detach(this.oImg);}catch(err){}
+				}
 			}
 			tools.dispose();
 		}.bind(this));
@@ -1584,9 +1519,9 @@ var imageEditor = new Class({ // Image resizing tools
 			subjectImg.addClass('bordered');
 			borderBox.checked = true;
 		}
-		if(this.oImg.retrieve('link')){
+		if(this.oImg.retrieve('tip:title') && (this.oImg.retrieve('type') != 'pdf')){
 			linkInputBox.setStyle('display', 'block');
-			linkInput.set('value', this.oImg.retrieve('link').replace(/^http:\/\//, ''));
+			linkInput.set('value', this.oImg.retrieve('tip:title').replace(/^http:\/\//, ''));
 			linkInputCheck.checked = 1;			
 		}
 		[span, sliderWrap, updateBtn, closeBtn, deleteBtn, borderBoxLabel, borderBox, linkInputCheckLabel, linkInputCheck, linkInputBox].invoke('inject', tools.container);
